@@ -1,3 +1,11 @@
+// --- O TRUQUE PARA O RENDER NÃO DORMIR ---
+const http = require('http');
+http.createServer((req, res) => {
+    res.write("Estou acordado!");
+    res.end();
+}).listen(8080);
+// -----------------------------------------
+
 const { Client, GatewayIntentBits } = require('discord.js');
 
 const client = new Client({
