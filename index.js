@@ -1,9 +1,16 @@
-// --- O TRUQUE PARA O RENDER NÃO DORMIR ---
+// --- TRUQUE ATUALIZADO PARA O RENDER ---
 const http = require('http');
+
+// O Render envia a porta correta pela variável process.env.PORT
+const port = process.env.PORT || 8080; 
+
 http.createServer((req, res) => {
-    res.write("Estou acordado!");
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.write("O Cat Jiji está acordado! 🐾");
     res.end();
-}).listen(8080);
+}).listen(port, () => {
+    console.log(`Servidor de monitoramento rodando na porta ${port}`);
+});
 // -----------------------------------------
 
 const { Client, GatewayIntentBits } = require('discord.js');
