@@ -1,7 +1,10 @@
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const http = require('http');
 
-// --- 1. CONFIGURAÇÃO DO BOT (Movido para cima para o truque enxergar o bot) ---
+// --- ID DO CANAL DE AVISOS ---
+const canalAvisosId = '1483619645700440105';
+
+// --- 1. CONFIGURAÇÃO DO BOT ---
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -16,16 +19,22 @@ const port = process.env.PORT || 8080;
 http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
     
-    // Verifica se o bot já logou no Discord antes de tentar mudar o status
+    // Verifica se o bot está conectado no Discord
     if (client.isReady()) {
+        const canal = client.channels.cache.get(canalAvisosId);
+
         if (req.url === '/ligar') {
-            client.user.setActivity('Servidor ON 🟢', { type: ActivityType.Playing });
+            client.user.setActivity('CaosDoPacifico ON 🟢', { type: ActivityType.Playing });
+            if (canal) canal.send('🟢 **O servidor do CaosDoPacifico está ONLINE!** Podem entrar no Radmin e abrir o Mine!');
             res.write("Sinal recebido: Servidor LIGADO!");
+            
         } else if (req.url === '/desligar') {
             client.user.setActivity('Servidor Offline 🔴', { type: ActivityType.Watching });
+            if (canal) canal.send('🔴 **O servidor foi desligado.** Voltamos em breve!');
             res.write("Sinal recebido: Servidor DESLIGADO!");
+            
         } else {
-            res.write("Jiji está acordado! 🐾");
+            res.write("O Cat Jiji está acordado! 🐾");
         }
     } else {
         res.write("Servidor web on, mas o bot do Discord ainda está conectando...");
@@ -39,7 +48,6 @@ http.createServer((req, res) => {
 // --- 3. EVENTOS DO BOT ---
 client.once('ready', () => {
     console.log(`✅ O Pai tá ON! Logado como: ${client.user.tag}`);
-    // O bot já nasce com o status de "Aguardando" até você ligar o PC
     client.user.setActivity('Aguardando o servidor...', { type: ActivityType.Watching });
 });
 
@@ -47,7 +55,7 @@ client.on('messageCreate', (message) => {
     if (message.author.bot) return;
 
     if (message.content === '!caos') {
-        message.reply('🐾 **CaosDoPacifico Online!** Jiji está vigiando o servidor na nuvem.');
+        message.reply('🐾 **CaosDoPacifico** está sendo vigiado pelo Cat Jiji na nuvem.');
     }
 });
 
