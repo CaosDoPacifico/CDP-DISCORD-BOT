@@ -96,4 +96,6 @@ http.createServer((req, res) => {
 // ==========================================
 //                   LOGIN
 // ==========================================
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).catch(erro => {
+    console.error("🚨 ERRO CRÍTICO AO LOGAR O BOT:", erro);
+});
