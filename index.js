@@ -4,9 +4,9 @@ const http = require('http');
 // ==========================================
 //           CONFIGURAÇÕES DOS CANAIS
 // ==========================================
-// Substitua os textos abaixo pelos IDs reais dos canais do seu servidor Discord!
-const CANAL_AVISOS_ID = '1483619645700440105';
-const CANAL_BOAS_VINDAS_ID = '1351380955327238225';
+// Verifique se os IDs abaixo estão corretos!
+const CANAL_AVISOS_ID = 'COLOQUE_O_ID_AQUI'; 
+const CANAL_BOAS_VINDAS_ID = 'COLOQUE_O_ID_AQUI';
 
 // ==========================================
 //              CONFIGURAÇÃO DO BOT
@@ -19,10 +19,6 @@ const client = new Client({
         GatewayIntentBits.GuildMembers, 
     ]
 });
-
-// LIGANDO A VISÃO DE RAIO-X (DEBUG)
-// Isso vai fazer o bot cuspir tudo o que ele está pensando lá no console do Render
-client.on('debug', console.log);
 
 client.once('ready', () => {
     console.log(`✅ O Pai tá ON! Logado como: ${client.user.tag}`);
@@ -57,7 +53,7 @@ client.on('guildMemberAdd', (member) => {
 });
 
 // ==========================================
-//     TRUQUE PARA FICAR ONLINE NO RENDER
+//     TRUQUE PARA FICAR ONLINE (KOYEB/BAT)
 // ==========================================
 const port = process.env.PORT || 8080;
 http.createServer((req, res) => {
@@ -67,29 +63,27 @@ http.createServer((req, res) => {
         const canal = client.channels.cache.get(CANAL_AVISOS_ID);
         if (canal) {
             canal.send('🟢 **O servidor TWIP está ONLINE!** Podem entrar no Radmin e abrir o Mine!');
-            console.log('Mensagem de LIGAR enviada pro Discord!');
+            console.log('Mensagem de LIGAR enviada!');
         }
-        res.write("Comando LIGAR recebido e executado.");
+        res.write("Comando LIGAR executado.");
     } 
     else if (req.url === '/desligar') {
         const canal = client.channels.cache.get(CANAL_AVISOS_ID);
         if (canal) {
             canal.send('🔴 **O servidor TWIP foi desligado.** Voltamos em breve!');
-            console.log('Mensagem de DESLIGAR enviada pro Discord!');
+            console.log('Mensagem de DESLIGAR enviada!');
         }
-        res.write("Comando DESLIGAR recebido e executado.");
+        res.write("Comando DESLIGAR executado.");
     } 
     else {
         res.write("O Cat Jiji está acordado! 🐾");
     }
-
     res.end();
 }).listen(port, () => {
-    console.log(`🚀 Servidor de monitoramento ON na porta ${port}`);
+    console.log(`🚀 Servidor Web rodando na porta ${port}`);
 });
 
 // ==========================================
 //                   LOGIN
 // ==========================================
-// O bot vai pegar o token direto das "Environment Variables" da hospedagem
 client.login(process.env.DISCORD_TOKEN);
