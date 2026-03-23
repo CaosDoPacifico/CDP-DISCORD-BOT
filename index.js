@@ -91,9 +91,5 @@ http.createServer((req, res) => {
 // ==========================================
 //                   LOGIN
 // ==========================================
-// A ARMADILHA: Forçando o Render a nos dizer se o Token está lá ou não
-console.log("🔍 Verificando Token: " + (process.env.DISCORD_TOKEN ? "O Token existe!" : "O Token está VAZIO/NÃO ENCONTRADO!"));
-
-client.login(process.env.DISCORD_TOKEN).catch(erro => {
-    console.error("🚨 ERRO CRÍTICO AO LOGAR O BOT:", erro);
-});
+// O bot vai pegar o token direto das "Environment Variables" da hospedagem
+client.login(process.env.DISCORD_TOKEN);
