@@ -16,9 +16,13 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMembers, // Essencial para ver quem entra no servidor
+        GatewayIntentBits.GuildMembers, 
     ]
 });
+
+// LIGANDO A VISÃO DE RAIO-X (DEBUG)
+// Isso vai fazer o bot cuspir tudo o que ele está pensando lá no console do Render
+client.on('debug', console.log);
 
 client.once('ready', () => {
     console.log(`✅ O Pai tá ON! Logado como: ${client.user.tag}`);
@@ -42,19 +46,13 @@ client.on('guildMemberAdd', (member) => {
     const canalBoasVindas = member.guild.channels.cache.get(CANAL_BOAS_VINDAS_ID);
     
     if (canalBoasVindas) {
-        // Lista com as 3 mensagens diferentes
         const mensagens = [
             `🐾 Olá ${member}, bem-vindo(a) ao **CaosDoPacifico**! Sinta-se em casa.`,
             `🎉 Olha só quem chegou! E aí ${member}, preparado(a) para o **Caos**?`,
             `✨ Um novo aventureiro! Boas-vindas ao **CaosDoPacifico**, ${member}. Puxa uma cadeira e bora jogar!`
         ];
-
-        // Sorteia uma mensagem aleatória da lista
         const mensagemSorteada = mensagens[Math.floor(Math.random() * mensagens.length)];
-
         canalBoasVindas.send(mensagemSorteada);
-    } else {
-        console.log('Erro: Canal de boas-vindas não encontrado. O ID está certo?');
     }
 });
 
@@ -65,7 +63,6 @@ const port = process.env.PORT || 8080;
 http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
 
-    // Verifica se o link acessado foi o /ligar
     if (req.url === '/ligar') {
         const canal = client.channels.cache.get(CANAL_AVISOS_ID);
         if (canal) {
@@ -74,7 +71,6 @@ http.createServer((req, res) => {
         }
         res.write("Comando LIGAR recebido e executado.");
     } 
-    // Verifica se o link acessado foi o /desligar
     else if (req.url === '/desligar') {
         const canal = client.channels.cache.get(CANAL_AVISOS_ID);
         if (canal) {
@@ -83,7 +79,6 @@ http.createServer((req, res) => {
         }
         res.write("Comando DESLIGAR recebido e executado.");
     } 
-    // Se acessar qualquer outra coisa (ou a página principal do Render)
     else {
         res.write("O Cat Jiji está acordado! 🐾");
     }
@@ -96,6 +91,9 @@ http.createServer((req, res) => {
 // ==========================================
 //                   LOGIN
 // ==========================================
+// A ARMADILHA: Forçando o Render a nos dizer se o Token está lá ou não
+console.log("🔍 Verificando Token: " + (process.env.DISCORD_TOKEN ? "O Token existe!" : "O Token está VAZIO/NÃO ENCONTRADO!"));
+
 client.login(process.env.DISCORD_TOKEN).catch(erro => {
     console.error("🚨 ERRO CRÍTICO AO LOGAR O BOT:", erro);
 });
